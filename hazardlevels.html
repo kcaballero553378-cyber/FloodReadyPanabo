@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <title>Document</title>
+</head>
+<body>
+  <nav>
+  <div class="nav-brand">
+    <div class="drop"></div>
+    <span>Panabo DRRM</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="index.html">Overview</a></li>
+    <li><a href="hazardlevels.html" class="active">Hazard Info</a></li>
+    <li><a href="preparedness.html">Preparedness</a></li>
+    <li><a href="report.html">Report</a></li>
+    <li><a href="tracking.html">Tracking</a></li>
+    <li><a href="documentsKMCycle.html">Resources</a></li>
+    <li><a href="alerts.html">Alerts</a></li>
+  </ul>
+  
+</nav>
+
+<!-- ALERT BAR -->
+<div class="alert-bar" style="margin-top:60px">
+  📢 <span>WEATHER ADVISORY:</span> PAGASA reports above-normal rainfall expected this week. Monitor your local barangay announcements. Stay informed. Stay safe.
+</div>
+    <section class="hazard-section" id="hazard">
+  <div class="section-label">Risk Assessment</div>
+  <div class="section-title">Flood Hazard Levels</div>
+  <div class="divider"></div>
+  <p style="color:var(--muted); max-width:600px; margin-bottom:1rem;">Panabo City uses a color-coded system to indicate flood risk levels and guide community response.</p>
+  <div class="hazard-grid">
+    <div class="hazard-card low">
+      <span class="level-badge">Low</span>
+      <div class="level-height">0.1m – 0.5m</div>
+      <div style="font-size:.8rem; margin-bottom:.5rem;">Water Height</div>
+      <div class="level-desc">Minor inconvenience. Stay alert. Monitor updates from PAGASA and local announcements.</div>
+    </div>
+    <div class="hazard-card med">
+      <span class="level-badge">Medium</span>
+      <div class="level-height">0.5m – 1.5m</div>
+      <div style="font-size:.8rem; margin-bottom:.5rem;">Water Height</div>
+      <div class="level-desc">Possible damage to property. Prepare emergency kits. Consider voluntary evacuation.</div>
+    </div>
+    <div class="hazard-card high">
+      <span class="level-badge">High</span>
+      <div class="level-height">Above 1.5m</div>
+      <div style="font-size:.8rem; margin-bottom:.5rem;">Water Height</div>
+      <div class="level-desc">Danger to life and property. Mandatory evacuation. Follow DRRM officer instructions immediately.</div>
+    </div>
+  </div>
+
+  <!-- Flood Prone Areas -->
+  <div style="margin-top:3.5rem;">
+    <div class="section-label">High-Risk Zones</div>
+    <div class="section-title" style="font-size:2rem;">Flood-Prone Barangays</div>
+    <div class="divider"></div>
+    <div class="areas-grid">
+      <div class="area-card"><div class="area-name">New Pandan</div><div class="area-risk">⚠ HIGH RISK</div></div>
+      <div class="area-card"><div class="area-name">Gredu</div><div class="area-risk">⚠ HIGH RISK</div></div>
+      <div class="area-card"><div class="area-name">Santo Niño</div><div class="area-risk">⚠ MODERATE RISK</div></div>
+      <div class="area-card"><div class="area-name">San Vicente</div><div class="area-risk">⚠ MODERATE RISK</div></div>
+    </div>
+    <p style="margin-top:1.2rem; font-size:.8rem; color:var(--muted);">⚠ Floodwaters can reach waist-deep levels in severe cases. Always follow evacuation orders promptly.</p>
+  </div>
+</section>
+
+<section class="evac-section" id="evacuation">
+  <div class="sec-tag">Safety Planning</div>
+  <div class="sec-title">Evacuation Centers<br>&amp; Procedures</div>
+  <div class="divider"></div>
+  <p class="lead">Know where to go before disaster strikes. Familiarize yourself with the nearest designated evacuation center in your area.</p>
+  <div class="evac-grid">
+    <div>
+      <div class="evac-center">
+        <div class="evac-num">EC1</div>
+        <div>
+          <div class="evac-name">Panabo City Sports Complex</div>
+          <div class="evac-addr">📍 Poblacion, Panabo City</div>
+          <div class="evac-cap">✅ Capacity: ~500 families | Primary center</div>
+        </div>
+      </div>
+      <div class="evac-center">
+        <div class="evac-num">EC2</div>
+        <div>
+          <div class="evac-name">Panabo National High School</div>
+          <div class="evac-addr">📍 Brgy. San Francisco, Panabo City</div>
+          <div class="evac-cap">✅ Capacity: ~300 families | Secondary center</div>
+        </div>
+      </div>
+      <div class="evac-center">
+        <div class="evac-num">EC3</div>
+        <div>
+          <div class="evac-name">Panabo City Hall Gymnasium</div>
+          <div class="evac-addr">📍 Panabo City Hall Complex</div>
+          <div class="evac-cap">✅ Capacity: ~200 families | Coordination hub</div>
+        </div>
+      </div>
+      <div style="padding:1rem 1.2rem;background:rgba(0,194,224,.07);border:1px solid var(--border);border-radius:8px;font-size:.78rem;color:var(--muted);" class="pad">
+        🏥 <strong style="color:var(--white)">Medical:</strong> First aid teams deployed at all evacuation centers during emergencies.<br>
+        🍱 <strong style="color:var(--white)">Food:</strong> Emergency food packs distributed in coordination with DSWD.<br>
+        🚒 <strong style="color:var(--white)">Rescue:</strong> Rubber boats and rescue teams on standby at CDRRMO.
+      </div>
+    </div>
+    <div class="evac-map-box">
+      <h4>🚶 Evacuation Procedures</h4>
+      <div class="route-step"><div class="route-num">1</div><div>Receive official evacuation order from barangay captain or DRRMO officer via text, announcements, or sirens.</div></div>
+      <div class="route-step"><div class="route-num">2</div><div>Grab your <strong>emergency kit</strong>: water, food, medicine, documents, flashlight, and extra clothing.</div></div>
+      <div class="route-step"><div class="route-num">3</div><div>Turn off electricity, gas, and water at the main switches before leaving your home.</div></div>
+      <div class="route-step"><div class="route-num">4</div><div>Proceed to your <strong>nearest designated evacuation center</strong> using elevated routes. Avoid flooded roads.</div></div>
+      <div class="route-step"><div class="route-num">5</div><div>Register at the evacuation center and receive your family ID from the barangay health worker.</div></div>
+      <div class="route-step"><div class="route-num">6</div><div>Wait for the official <strong>"All Clear"</strong> signal from DRRMO before returning home.</div></div>
+      <div style="margin-top:1.2rem;padding:.8rem 1rem;background:rgba(224,51,51,.08);border-radius:6px;font-size:.76rem;color:#c08080;">
+        🚫 <strong>DO NOT</strong> return home until officially cleared. Do not walk through flooded roads. Do not use electrical equipment near water.
+      </div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
