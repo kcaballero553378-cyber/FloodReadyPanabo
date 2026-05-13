@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Report an Incident — Panabo DRRM</title>
+  <!-- Vercel Web Analytics -->
+<script defer src="/_vercel/insights/script.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ── SUCCESS BANNER STYLING ── */
+    .success-banner {
+      display: none;
+      margin-top: 1.8rem;
+      padding: 1.5rem 1.8rem;
+      background: linear-gradient(135deg, rgba(29,185,84,0.12), rgba(29,185,84,0.06));
+      border: 1px solid rgba(29,185,84,0.5);
+      border-left: 4px solid #1db954;
+      border-radius: 10px;
+      font-family: 'IBM Plex Sans', sans-serif;
+      color: #a8e6bf;
+      animation: slideDown 0.4s ease;
+    }
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .success-banner strong {
+      display: block;
+      font-size: 1.05rem;
+      color: #1db954;
+      margin-bottom: .6rem;
+      letter-spacing: .5px;
+    }
+    .success-banner p {
+      font-size: .86rem;
+      color: #7abf90;
+      line-height: 1.7;
+      margin-top: .5rem;
+    }
+    .success-banner a {
+      color: #4fc3f7;
+      text-decoration: underline;
+    }
+    .success-banner a:hover { color: #81d4fa; }
+    .ref-display {
+      display: inline-block;
+      margin-top: .5rem;
+      padding: .45rem 1.1rem;
+      background: rgba(29,185,84,0.18);
+      border: 1px solid rgba(29,185,84,0.4);
+      border-radius: 6px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #1db954;
+      letter-spacing: 2px;
+    }
+    .success-icon {
+      font-size: 2rem;
+      margin-bottom: .4rem;
+      display: block;
+    }
+
+    /* ── FIX DROPDOWN COLOR ── */
+    #rep-location {
+      color: inherit;
+      background-color: transparent;
+    }
+    #rep-location option {
+      background-color: #0e2040;
+      color: #eef3fc;
+    }
+
+    /* ── SUBMIT BUTTON ── */
+    .btn-submit {
+      margin-top: 1.2rem;
+      padding: 12px 32px;
+      background: #00c2e0;
+      color: #08111f;
+      border: none;
+      border-radius: 5px;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: .9rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: background .2s, transform .15s, box-shadow .15s;
+    }
+    .btn-submit:hover {
+      background: #00a8c4;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,194,224,0.3);
+    }
+    .btn-submit:active {
+      transform: translateY(0);
+      box-shadow: none;
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">
+    <div class="drop"></div>
+    <span>Panabo DRRM</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="index.html">Overview</a></li>
+    <li><a href="hazardlevels.html">Hazard Info</a></li>
+    <li><a href="preparedness.html">Preparedness</a></li>
+    <li><a href="report.html" class="active">Report</a></li>
+    <li><a href="tracking.html">Tracking</a></li>
+    <li><a href="documentsKMCycle.html">Resources</a></li>
+    <li><a href="alerts.html">Alerts</a></li>
+  </ul>
+</nav>
+
+<div class="alert-bar" style="margin-top:60px">
+  📢 <span>WEATHER ADVISORY:</span> PAGASA reports above-normal rainfall expected this week. Monitor your local barangay announcements. Stay informed. Stay safe.
+</div>
+
+<section class="report-section">
+  <div class="section-label">Citizen Engagement</div>
+  <div class="section-title">Report an Incident</div>
+  <div class="divider"></div>
+  <p style="color:#7a9bbf; max-width:600px; margin-bottom:2rem; font-family:'IBM Plex Sans',sans-serif; font-size:.9rem; line-height:1.7;">
+    Submit a flood or disaster-related incident in your area. Your report will be logged, assigned a reference number, and forwarded to the Panabo CDRRMO for action. All reports are visible on the <a href="tracking.html" style="color:#4fc3f7;">Tracking Dashboard</a>.
+  </p>
+
+  <div class="report-form-wrap">
+    <div class="form-grid">
+
+      <div class="form-group full">
+        <label>Email <span style="color:#ff6b6b;">*</span></label>
+        <input type="email" id="rep-email" placeholder="e.g. juan@email.com">
+      </div>
+
+      <div class="form-group full">
+        <label>Location (select the barangay where the incident is located) <span style="color:#ff6b6b;">*</span></label>
+        <select id="rep-location">
+          <option value="">— Select Barangay —</option>
+          <option>Brgy. New Pandan</option>
+          <option>Brgy. Gredu</option>
+          <option>Brgy. Santo Niño</option>
+          <option>Brgy. San Vicente</option>
+          <option>Brgy. Manay</option>
+          <option>Brgy. Tibungol</option>
+          <option>Brgy. Kasilak</option>
+          <option>Brgy. Tagpore</option>
+          <option>Brgy. Datu Abdul Dadia</option>
+          <option>Poblacion</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div class="form-group full">
+        <label>Full address of where the incident happened <span style="color:#ff6b6b;">*</span></label>
+        <input type="text" id="rep-address" placeholder="Enter full address">
+      </div>
+
+      <div class="form-group full">
+        <label>Description of the incident <span style="color:#ff6b6b;">*</span></label>
+        <textarea id="rep-desc" placeholder="Describe what happened..."></textarea>
+      </div>
+
+      <div class="form-group full">
+        <label>Upload an image of the incident <span style="color:#ff6b6b;">*</span></label>
+        <input type="file" id="rep-image" accept="image/*">
+      </div>
+
+    </div>
+
+    <button class="btn-submit" onclick="submitReport()">📤 Submit Report</button>
+
+    <!-- SUCCESS BANNER — hidden by default, only shows after submit, disappears on refresh -->
+    <div class="success-banner" id="success-msg">
+      <span class="success-icon">✅</span>
+      <strong>Report Successfully Submitted!</strong>
+      Your reference number:
+      <div class="ref-display" id="ref-num"></div>
+      <p>
+        Your report is now <strong style="color:#1db954;">Pending</strong> review by the Panabo CDRRMO.<br>
+        You can check your report status anytime on the<br>
+        <a href="tracking.html">📊 View Tracking Dashboard →</a>
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<script>
+  function generateRef() {
+    const now   = new Date();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day   = String(now.getDate()).padStart(2, '0');
+    const rand  = String(Math.floor(Math.random() * 900) + 100);
+    return '#' + now.getFullYear() + '-' + month + day + rand;
+  }
+
+  function submitReport() {
+    const email     = document.getElementById('rep-email').value.trim();
+    const location  = document.getElementById('rep-location').value;
+    const address   = document.getElementById('rep-address').value.trim();
+    const desc      = document.getElementById('rep-desc').value.trim();
+    const imageFile = document.getElementById('rep-image').files[0];
+
+    if (!email || !location || !address || !desc || !imageFile) {
+      alert('Please complete all required fields.');
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = function(e) {
+      const ref = generateRef();
+
+      const report = {
+        ref:         ref,
+        email:       email,
+        location:    location,
+        address:     address,
+        desc:        desc,
+        image:       e.target.result,
+        status:      'Pending',
+        submittedAt: new Date().toISOString()
+      };
+
+      // save to localStorage so tracking.html can read it
+      let existing = JSON.parse(localStorage.getItem('drrm_reports') || '[]');
+      existing.unshift(report);
+      localStorage.setItem('drrm_reports', JSON.stringify(existing));
+
+      // show success banner (only visible this session, gone on refresh)
+      document.getElementById('ref-num').textContent = ref;
+      const banner = document.getElementById('success-msg');
+      banner.style.display = 'block';
+      banner.scrollIntoView({ behavior: 'smooth' });
+
+      // clear all fields
+      document.getElementById('rep-email').value    = '';
+      document.getElementById('rep-location').value = '';
+      document.getElementById('rep-address').value  = '';
+      document.getElementById('rep-desc').value     = '';
+      document.getElementById('rep-image').value    = '';
+    };
+
+    reader.readAsDataURL(imageFile);
+  }
+</script>
+
+</body>
+</html>

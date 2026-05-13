@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Vercel Web Analytics -->
+<script defer src="/_vercel/insights/script.js"></script>
+
+    <link rel="stylesheet" href="style.css">
+     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <title>Document</title>
+</head>
+<script src="script.js"></script>
+<body>
+   <nav>
+  <div class="nav-brand">
+    <div class="drop"></div>
+    <span>Panabo DRRM</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="index.html">Overview</a></li>
+    <li><a href="hazardlevels.html">Hazard Info</a></li>
+    <li><a href="preparedness.html" class="active">Preparedness</a></li>
+    <li><a href="report.html">Report</a></li>
+    <li><a href="tracking.html">Tracking</a></li>
+    <li><a href="documentsKMCycle.html">Resources</a></li>
+    <li><a href="alerts.html">Alerts</a></li>
+  </ul>
+  
+</nav>
+
+<!-- ALERT BAR -->
+<div class="alert-bar" style="margin-top:60px">
+  📢 <span>WEATHER ADVISORY:</span> PAGASA reports above-normal rainfall expected this week. Monitor your local barangay announcements. Stay informed. Stay safe.
+</div>
+    <section id="preparedness" style="background: #08111f;">
+  <div class="section-label">Disaster Preparedness</div>
+  <div class="section-title">What To Do</div>
+  <div class="divider"></div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab(event,'before')">Before a Flood</button>
+    <button class="tab-btn" onclick="switchTab(event,'during')">During a Flood</button>
+    <button class="tab-btn" onclick="switchTab(event,'after')">After a Flood</button>
+    <button class="tab-btn" onclick="switchTab(event,'community')">Community Action</button>
+  </div>
+
+  <div id="before" class="tab-content active">
+    <ul class="steps">
+      <li><span class="ico">🗺️</span> <div><strong>Know your risk:</strong> Check the flood hazard map and identify if your area is prone to flooding.</div></li>
+      <li><span class="ico">🎒</span> <div><strong>Prepare an emergency kit:</strong> Include food, water, medicine, flashlight, batteries, important documents, and first aid supplies.</div></li>
+      <li><span class="ico">🏠</span> <div><strong>Secure your home:</strong> Elevate electrical appliances and furniture, repair leaks, and clear drainage channels.</div></li>
+      <li><span class="ico">📡</span> <div><strong>Stay informed:</strong> Monitor weather updates from PAGASA and local announcements regularly.</div></li>
+    </ul>
+  </div>
+  <div id="during" class="tab-content">
+    <ul class="steps">
+      <li><span class="ico">🚨</span> <div><strong>Evacuate immediately</strong> if advised by authorities or if water levels rise rapidly.</div></li>
+      <li><span class="ico">🚫</span> <div><strong>Avoid walking or driving through floodwaters:</strong> They may be deeper than they look and can carry debris or contaminants.</div></li>
+      <li><span class="ico">⚡</span> <div><strong>Stay away from power lines</strong> and electrical equipment. Do not touch wet switches or outlets.</div></li>
+      <li><span class="ico">⛰️</span> <div><strong>Move to higher ground</strong> and follow all instructions from rescue teams and DRRM officers.</div></li>
+    </ul>
+  </div>
+  <div id="after" class="tab-content">
+    <ul class="steps">
+      <li><span class="ico">✅</span> <div><strong>Wait for the "all clear" signal</strong> before returning home.</div></li>
+      <li><span class="ico">🔍</span> <div><strong>Check for damage:</strong> Inspect your house for structural issues, gas leaks, or electrical problems.</div></li>
+      <li><span class="ico">🧹</span> <div><strong>Clean and disinfect:</strong> Remove mud and debris, and sanitize surfaces to prevent the spread of disease.</div></li>
+      <li><span class="ico">📋</span> <div><strong>Report incidents:</strong> Inform the local DRRMO or barangay office about damages and community needs.</div></li>
+    </ul>
+  </div>
+  <div id="community" class="tab-content">
+    <ul class="steps">
+      <li><span class="ico">♻️</span> <div><strong>Practice proper waste management:</strong> Do not throw garbage in canals, rivers, or drainage systems.</div></li>
+      <li><span class="ico">🤝</span> <div><strong>Participate in clean-up drives:</strong> Help maintain clear waterways in your barangay.</div></li>
+      <li><span class="ico">📚</span> <div><strong>Attend disaster preparedness seminars:</strong> Learn life-saving skills and share knowledge with others.</div></li>
+      <li><span class="ico">🌱</span> <div><strong>Support sustainable practices:</strong> Reduce water usage and avoid activities that contribute to land subsidence.</div></li>
+    </ul>
+  </div>
+</section>
+<script>function switchTab(event, tabId) {
+
+  // hide all tab contents
+  const contents = document.querySelectorAll(".tab-content");
+  contents.forEach(content => {
+    content.classList.remove("active");
+  });
+
+  // remove active class from buttons
+  const buttons = document.querySelectorAll(".tab-btn");
+  buttons.forEach(btn => {
+    btn.classList.remove("active");
+  });
+
+  // show selected tab
+  document.getElementById(tabId).classList.add("active");
+
+  // activate clicked button
+  event.currentTarget.classList.add("active");
+}</script>
+</body>
+</html>

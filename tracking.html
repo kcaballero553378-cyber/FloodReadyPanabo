@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Report Tracking — Panabo DRRM</title>
+  <!-- Vercel Web Analytics -->
+<script defer src="/_vercel/insights/script.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">
+    <div class="drop"></div>
+    <span>Panabo DRRM</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="index.html">Overview</a></li>
+    <li><a href="hazardlevels.html">Hazard Info</a></li>
+    <li><a href="preparedness.html">Preparedness</a></li>
+    <li><a href="report.html">Report</a></li>
+    <li><a href="tracking.html" class="active">Tracking</a></li>
+    <li><a href="documentsKMCycle.html">Resources</a></li>
+    <li><a href="alerts.html">Alerts</a></li>
+  </ul>
+  
+</nav>
+
+<div class="alert-bar" style="margin-top:60px">
+  📢 <span>WEATHER ADVISORY:</span> PAGASA reports above-normal rainfall expected this week. Monitor your local barangay announcements. Stay informed. Stay safe.
+</div>
+
+<section id="tracking">
+  <div class="section-label">Transparency & Accountability</div>
+  <div class="section-title">Report Tracking Dashboard</div>
+  <div class="divider"></div>
+  <p style="color:#7a9bbf; max-width:640px; margin-bottom:1.5rem; font-family:'IBM Plex Sans',sans-serif; font-size:.9rem; line-height:1.7;">
+    Track the status of submitted incident reports. Reports submitted via the <a href="report.html" style="color:#4fc3f7;">Report page</a> appear here automatically. This dashboard promotes transparency and accountability in LGU governance.
+  </p>
+
+  <!-- Toolbar -->
+  <div class="track-toolbar">
+    <input type="text" id="search-input" placeholder="🔍  Search by location, type, or ref #" oninput="renderTable()">
+    <select id="filter-status" onchange="renderTable()">
+      <option value="">All Statuses</option>
+      <option value="Pending">Pending</option>
+      <option value="Ongoing">Ongoing</option>
+      <option value="Resolved">Resolved</option>
+    </select>
+    
+    <button class="btn-clear" onclick="clearUserReports()">🗑 Clear My Reports</button>
+    <div class="total-badge">Total: <span id="total-count">0</span></div>
+  </div>
+
+  <!-- Table -->
+  <div style="overflow-x:auto;">
+    <table class="report-table">
+  <thead>
+    <tr>
+      <th>REF #</th>
+      <th>EMAIL</th>
+      <th>LOCATION</th>
+      <th>FULL ADDRESS</th>
+      <th>DESCRIPTION</th>
+      <th>IMAGE</th>
+      <th>DATE FILED</th>
+      <th>STATUS</th>
+    </tr>
+  </thead>
+
+  <tbody id="report-tbody">
+    <!-- JS DATA -->
+  </tbody>
+</table>
+  </div>
+
+  <!-- Legend -->
+  <div class="legend">
+    <div class="legend-item"><span class="status pending">Pending</span> Awaiting review</div>
+    <div class="legend-item"><span class="status ongoing">Ongoing</span> Being addressed</div>
+    <div class="legend-item"><span class="status resolved">Resolved</span> Closed / resolved</div>
+    <div class="legend-item" style="color:#4fc3f7; font-size:.75rem; margin-left:auto;">
+      <span class="new-badge">NEW</span> Submitted via this portal
+    </div>
+  </div>
+</section>
+
+<script>
+  // ── Hardcoded "official" records (always shown) ──────────────────────────
+  const OFFICIAL_REPORTS = [
+    
+  {
+  ref: '#2026-0508700',
+  email: 'mariasantos@gmail.com',
+  location: 'Brgy. New Pandan',
+  address: 'Purok 3, Brgy. New Pandan, Panabo City',
+  desc: 'Floodwater reached knee-deep near our house. Road is impassable.',
+  image: '',
+  date: 'May 8, 2026',
+  status: 'Pending',
+  isNew: false
+},
+{
+  ref: '#2026-0508102',
+  email: 'juanreyes@gmail.com',
+  location: 'Brgy. Gredu',
+  address: 'Purok 5, Brgy. Gredu, Panabo City',
+  desc: 'Canal near our area is clogged with garbage causing overflow to the street.',
+  image: '',
+  date: 'May 8, 2026',
+  status: 'Ongoing',
+  isNew: false
+},
+{
+  ref: '#2026-0508103',
+  email: 'anacruz@gmail.com',
+  location: 'Brgy. Santo Niño',
+  address: 'Zone 2, Brgy. Santo Niño, Panabo City',
+  desc: 'Large potholes and cracks on the main road after heavy rainfall.',
+  image: '',
+  date: 'May 8, 2026',
+  status: 'Resolved',
+  isNew: false
+},
+{
+  ref: '#2026-0508104',
+  email: 'pedrolim@gmail.com',
+  location: 'Brgy. San Vicente',
+  address: 'Purok 1, Brgy. San Vicente, Panabo City',
+  desc: 'Floodwater entered our living area. Three families need immediate assistance.',
+  image: '',
+  date: 'May 8, 2026',
+  status: 'Pending',
+  isNew: false
+},
+{
+  ref: '#2026-0508105',
+  email: 'rosamendez@gmail.com',
+  location: 'Brgy. Manay',
+  address: 'Purok 2, Brgy. Manay, Panabo City',
+  desc: 'No electricity for 2 days in our area. Transformer appears damaged by flood.',
+  image: '',
+  date: 'May 8, 2026',
+  status: 'Ongoing',
+  isNew: false
+},
+{
+  ref: '#2026-0508106',
+  email: 'carlosbautista@gmail.com',
+  location: 'Brgy. Tibungol',
+  address: 'Sitio Mabini, Brgy. Tibungol, Panabo City',
+  desc: 'Slope near the creek showing signs of erosion after several days of rain.',
+  image: '',
+  date: 'May 8, 2026',
+  status: 'Pending',
+  isNew: false
+},
+{
+  ref: '#2026-0508107',
+  email: 'lizatorres@gmail.com',
+  location: 'Brgy. Kasilak',
+  address: 'Block 4, Brgy. Kasilak, Panabo City',
+  desc: 'Entire street flooded. Several residents evacuated to barangay hall.',
+  image: '',
+  date: 'May 8, 2026',
+  status: 'Resolved',
+  isNew: false
+},
+{
+  ref: '#2026-0508108',
+  email: 'markgarcia@gmail.com',
+  location: 'Brgy. Tagpore',
+  address: 'Purok 4, Brgy. Tagpore, Panabo City',
+  desc: 'Drainage pipe burst causing flooding in 2 streets. Needs urgent repair.',
+  image: '',
+  date: 'May 8, 2026',
+  status: 'Pending',
+  isNew: false
+},
+{
+  ref: '#2026-0508109',
+  email: 'gracedavid@gmail.com',
+  location: 'Brgy. Datu Abdul Dadia',
+  address: 'Purok 6, Brgy. Datu Abdul Dadia, Panabo City',
+  desc: 'Road is completely submerged. Residents cannot pass through.',
+  image: '',
+  date: 'May 8, 2026',
+  status: 'Ongoing',
+  isNew: false
+},
+{
+  ref: '#2026-0508110',
+  email: 'tonybautista@gmail.com',
+  location: 'Poblacion',
+  address: 'Purok 7, Poblacion, Panabo City',
+  desc: 'Garbage accumulated near flood drain blocking water flow.',
+  image: '',
+  date: 'May 8, 2026',
+  status: 'Resolved',
+  isNew: false
+}
+    
+  ];
+
+  function formatDate(isoStr) {
+
+    const d = new Date(isoStr);
+
+    return d.toLocaleDateString('en-PH', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    });
+  }
+
+  function getAllReports() {
+
+    const userRaw =
+      JSON.parse(localStorage.getItem('drrm_reports') || '[]');
+
+    const userMapped = userRaw.map(function(r) {
+
+      return {
+        ref: r.ref,
+        email: r.email,
+        location: r.location,
+        address: r.address,
+        desc: r.desc,
+        image: r.image,
+        date: formatDate(r.submittedAt),
+        status: r.status || 'Pending',
+        isNew: true
+      };
+
+    });
+
+    return userMapped.concat(OFFICIAL_REPORTS);
+  }
+
+  function renderTable() {
+
+    const search =
+      document.getElementById('search-input')
+      .value
+      .toLowerCase();
+
+    const filterStatus =
+      document.getElementById('filter-status').value;
+
+    let rows = getAllReports();
+
+    if (search) {
+
+      rows = rows.filter(function(r) {
+
+        return (
+          (r.ref && r.ref.toLowerCase().includes(search)) ||
+          (r.location && r.location.toLowerCase().includes(search)) ||
+          (r.address && r.address.toLowerCase().includes(search)) ||
+          (r.email && r.email.toLowerCase().includes(search))
+        );
+
+      });
+    }
+
+    if (filterStatus) {
+
+      rows = rows.filter(function(r) {
+
+        return (
+          r.status.toLowerCase() ===
+          filterStatus.toLowerCase()
+        );
+
+      });
+    }
+
+    document.getElementById('total-count').textContent =
+      rows.length;
+
+    const tbody =
+      document.getElementById('report-tbody');
+
+    if (rows.length === 0) {
+
+      tbody.innerHTML =
+        '<tr class="empty-row"><td colspan="8">No reports match your filter.</td></tr>';
+
+      return;
+    }
+
+    tbody.innerHTML = rows.map(function(r) {
+
+      const statusClass =
+        r.status.toLowerCase();
+
+      const newBadge =
+        r.isNew
+          ? '<span class="new-badge">NEW</span>'
+          : '';
+
+      const imageHtml =
+  r.image
+    ? `
+      <img
+        src="${r.image}"
+        width="80"
+        height="80"
+        onclick="openImageModal('${r.image}')"
+        style="
+          object-fit:cover;
+          border-radius:8px;
+          cursor:pointer;
+          border:2px solid rgba(255,255,255,.15);
+        "
+      >
+    `
+    : '—';
+
+      return `
+        <tr class="${r.isNew ? 'new-row' : ''}">
+          <td>${r.ref}${newBadge}</td>
+
+          <td>${r.email || '—'}</td>
+
+          <td>${r.location || '—'}</td>
+
+          <td>${r.address || '—'}</td>
+
+          <td>${r.desc || '—'}</td>
+
+          <td>${imageHtml}</td>
+
+          <td>${r.date}</td>
+
+          <td>
+            <span class="status ${statusClass}">
+              ${r.status}
+            </span>
+          </td>
+        </tr>
+      `;
+
+    }).join('');
+  }
+
+  function clearUserReports() {
+
+    if (
+      confirm(
+        'Remove all reports you submitted via this portal? Official records will remain.'
+      )
+    ) {
+
+      localStorage.removeItem('drrm_reports');
+
+      renderTable();
+    }
+  }
+
+  // Initial render
+  renderTable();
+</script>
+<!-- IMAGE MODAL -->
+<div id="imageModal" 
+     style="display:none;
+            position:fixed;
+            z-index:9999;
+            left:0;
+            top:0;
+            width:100%;
+            height:100%;
+            background:rgba(0,0,0,0.9);
+            justify-content:center;
+            align-items:center;">
+
+  <span onclick="closeImageModal()"
+        style="position:absolute;
+               top:20px;
+               right:35px;
+               color:white;
+               font-size:40px;
+               cursor:pointer;">
+    &times;
+  </span>
+
+  <img id="modalImage"
+       style="max-width:90%;
+              max-height:90%;
+              border-radius:12px;">
+</div>
+
+<script>
+function openImageModal(src) {
+
+  document.getElementById('imageModal').style.display = 'flex';
+
+  document.getElementById('modalImage').src = src;
+}
+
+function closeImageModal() {
+
+  document.getElementById('imageModal').style.display = 'none';
+}
+</script>
+</body>
+</html>

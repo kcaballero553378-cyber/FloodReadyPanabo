@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panabo City DRRM — Flood Management Portal</title>
+<!-- Vercel Web Analytics -->
+<script defer src="/_vercel/insights/script.js"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:   #08111f;
+  --dark:   #0b1a2e;
+  --card:   #0e2040;
+  --blue:   #1a4a8a;
+  --sky:    #2d7dd2;
+  --cyan:   #00c2e0;
+  --warn:   #f4a900;
+  --danger: #e03333;
+  --safe:   #1db954;
+  --white:  #eef3fc;
+  --muted:  #6a8aaf;
+  --border: rgba(45,125,210,0.22);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--navy);color:var(--white);font-family:'IBM Plex Sans',sans-serif;font-size:15px;line-height:1.75;}
+a{color:inherit;text-decoration:none;}
+img{max-width:100%;border-radius:8px;}
+
+/* ═══ NAV ═══ */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:999;
+  background:rgba(8,17,31,0.95);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 2.5rem;height:62px;
+}
+.nav-brand{display:flex;align-items:center;gap:10px;}
+.nav-drop{width:26px;height:26px;background:var(--cyan);clip-path:polygon(50% 0%,100% 38%,82% 100%,18% 100%,0% 38%);}
+.nav-name{font-family:'Bebas Neue',sans-serif;font-size:1.25rem;letter-spacing:3px;color:var(--cyan);}
+.nav-links{display:flex;gap:1.4rem;list-style:none;}
+.nav-links a{color:var(--muted);font-size:.76rem;letter-spacing:1.2px;text-transform:uppercase;transition:color .2s;}
+.nav-links a:hover{color:var(--cyan);}
+.nav-alert{background:var(--danger);color:#fff;font-size:.68rem;font-weight:700;letter-spacing:1px;padding:4px 11px;border-radius:3px;animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.55}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+
+/* ═══ TICKER ═══ */
+.ticker{
+  background:linear-gradient(90deg,#5a0e0e,#9b1c1c,#5a0e0e);
+  padding:.55rem 0;overflow:hidden;border-bottom:2px solid var(--danger);
+  margin-top:62px;
+}
+.ticker-inner{display:flex;gap:4rem;animation:scroll 30s linear infinite;white-space:nowrap;}
+@keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.ticker-inner span{font-family:'IBM Plex Mono',monospace;font-size:.72rem;letter-spacing:1.5px;color:#ffd;}
+.ticker-inner strong{color:#fff;}
+
+/* ═══ HERO ═══ */
+.hero{
+  min-height:100vh;
+  display:flex;flex-direction:column;justify-content:center;
+  position:relative;overflow:hidden;
+  background:linear-gradient(150deg,#040c18 0%,#09203f 55%,#0c2b52 100%);
+}
+.hero-grid{
+  position:absolute;inset:0;
+  background-image:linear-gradient(var(--border) 1px,transparent 1px),
+    linear-gradient(90deg,var(--border) 1px,transparent 1px);
+  background-size:55px 55px;opacity:.3;
+}
+.hero-glow{position:absolute;top:20%;left:10%;width:500px;height:500px;background:radial-gradient(circle,rgba(0,194,224,.07) 0%,transparent 70%);}
+.hero-content{position:relative;z-index:2;padding:5rem 3rem;max-width:920px;}
+.hero-tag{font-family:'IBM Plex Mono',monospace;font-size:.72rem;color:var(--cyan);letter-spacing:3.5px;text-transform:uppercase;margin-bottom:1.2rem;opacity:0;animation:fadeUp .6s .15s forwards;}
+.hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(3.8rem,10vw,7.5rem);line-height:.9;letter-spacing:2px;opacity:0;animation:fadeUp .7s .3s forwards;}
+.hero h1 em{color:var(--cyan);font-style:normal;}
+.hero-sub{max-width:580px;margin-top:1.6rem;color:#8aaace;font-size:.93rem;line-height:1.8;opacity:0;animation:fadeUp .7s .45s forwards;}
+.hero-btns{display:flex;gap:.9rem;margin-top:2.2rem;flex-wrap:wrap;opacity:0;animation:fadeUp .7s .6s forwards;}
+.btn{padding:11px 28px;border-radius:4px;font-size:.78rem;font-weight:600;letter-spacing:1.8px;text-transform:uppercase;cursor:pointer;border:none;transition:transform .15s,box-shadow .15s;display:inline-block;}
+.btn-cyan{background:var(--cyan);color:var(--navy);}
+.btn-cyan:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,194,224,.35);}
+.btn-ghost{background:transparent;border:1.5px solid var(--sky);color:var(--white);}
+.btn-ghost:hover{background:var(--sky);transform:translateY(-2px);}
+.hero-stats{display:flex;gap:3rem;margin-top:3.5rem;opacity:0;animation:fadeUp .7s .75s forwards;flex-wrap:wrap;}
+.stat-num{font-family:'Bebas Neue',sans-serif;font-size:2.6rem;color:var(--cyan);line-height:1;}
+.stat-label{font-size:.68rem;color:var(--muted);letter-spacing:1.2px;text-transform:uppercase;margin-top:.1rem;}
+.hero-wave{position:absolute;bottom:-2px;left:0;right:0;height:200px;}
+.hero-wave svg{width:100%;height:100%;}
+
+/* ═══ SECTION BASE ═══ */
+section{padding:5rem 3rem;}
+.sec-tag{font-family:'IBM Plex Mono',monospace;font-size:.68rem;color:var(--cyan);letter-spacing:3px;text-transform:uppercase;margin-bottom:.6rem;}
+.sec-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,5vw,3rem);letter-spacing:1px;line-height:1.05;margin-bottom:1.2rem;}
+.divider{width:44px;height:3px;background:var(--cyan);margin-bottom:2rem;border-radius:2px;}
+.lead{color:#8aaace;font-size:.93rem;max-width:680px;margin-bottom:2rem;}
+
+/* ═══ OVERVIEW ═══ */
+.overview{background:var(--dark);}
+.overview-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start;margin-top:2rem;}
+.overview-text p{color:#9ab2cc;font-size:.9rem;margin-bottom:1rem;line-height:1.85;}
+.overview-text p strong{color:var(--white);}
+.overview-cards{display:grid;gap:1rem;}
+.ov-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1.2rem 1.4rem;border-left:3px solid var(--cyan);}
+.ov-card h4{font-size:.85rem;font-weight:600;margin-bottom:.3rem;}
+.ov-card p{font-size:.78rem;color:var(--muted);}
+
+/* ═══ TARGET USERS ═══ */
+.users-section{background:var(--navy);}
+.users-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.2rem;margin-top:2rem;}
+.user-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.6rem;text-align:center;transition:transform .2s,border-color .2s;}
+.user-card:hover{transform:translateY(-5px);border-color:var(--cyan);}
+.user-icon{font-size:2.2rem;margin-bottom:.8rem;}
+.user-title{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:1px;color:var(--cyan);}
+.user-desc{font-size:.76rem;color:var(--muted);margin-top:.4rem;}
+
+/* ═══ HAZARD ═══ */
+.hazard-section{background:var(--card);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.hazard-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1.5rem;margin-top:2rem;}
+.h-card{border-radius:8px;padding:1.6rem;border-left:4px solid;background:rgba(255,255,255,.03);transition:transform .2s;}
+.h-card:hover{transform:translateY(-4px);}
+.h-card.low{border-color:#f4c900;}
+.h-card.med{border-color:#f48900;}
+.h-card.high{border-color:var(--danger);}
+.h-badge{display:inline-block;padding:3px 11px;border-radius:2px;font-size:.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:.8rem;}
+.low .h-badge{background:#f4c900;color:#000;}
+.med .h-badge{background:#f48900;color:#000;}
+.high .h-badge{background:var(--danger);color:#fff;}
+.h-height{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;margin-bottom:.3rem;}
+.h-desc{font-size:.8rem;color:var(--muted);}
+
+/* ═══ HAZARD MAP ═══ */
+.map-visual{
+  margin-top:3rem;background:var(--dark);border:1px solid var(--border);
+  border-radius:12px;overflow:hidden;
+}
+.map-header{padding:1rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.8rem;}
+.map-header span{font-family:'IBM Plex Mono',monospace;font-size:.75rem;color:var(--cyan);letter-spacing:2px;}
+.map-body{padding:1.5rem;display:grid;grid-template-columns:1fr auto;gap:1.5rem;align-items:start;}
+.map-svg-wrap{position:relative;}
+.map-legend{display:flex;flex-direction:column;gap:.7rem;min-width:140px;}
+.legend-item{display:flex;align-items:center;gap:.6rem;font-size:.75rem;}
+.legend-dot{width:12px;height:12px;border-radius:3px;flex-shrink:0;}
+
+/* ═══ FLOOD PRONE AREAS ═══ */
+.areas-section{background:var(--navy);}
+.areas-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1.1rem;margin-top:2rem;}
+.area-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1.3rem 1.6rem;position:relative;overflow:hidden;transition:border-color .2s,transform .2s;}
+.area-card:hover{border-color:var(--cyan);transform:translateY(-3px);}
+.area-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--sky),var(--cyan));}
+.area-name{font-family:'Bebas Neue',sans-serif;font-size:1.25rem;letter-spacing:1px;}
+.area-risk{font-size:.7rem;color:var(--danger);font-weight:600;letter-spacing:1px;margin-top:.3rem;}
+.area-note{font-size:.75rem;color:var(--muted);margin-top:.4rem;}
+
+/* ═══ EVACUATION ═══ */
+.evac-section{background:var(--card);border-top:1px solid var(--border);}
+.evac-grid{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;margin-top:2rem;align-items:start;}
+.evac-center{background:var(--dark);border:1px solid var(--border);border-radius:8px;padding:1.2rem;margin-bottom:1rem;display:flex;gap:1rem;align-items:flex-start;transition:border-color .2s;}
+.evac-center:hover{border-color:var(--cyan);}
+.evac-num{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--cyan);line-height:1;flex-shrink:0;}
+.evac-name{font-weight:600;font-size:.88rem;}
+.evac-addr{font-size:.75rem;color:var(--muted);margin-top:.2rem;}
+.evac-cap{font-size:.72rem;color:var(--safe);margin-top:.3rem;}
+.evac-map-box{background:var(--dark);border:1px solid var(--border);border-radius:10px;padding:1.5rem;}
+.evac-map-box h4{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:1px;color:var(--cyan);margin-bottom:1rem;}
+.route-step{display:flex;gap:.8rem;margin-bottom:.8rem;align-items:flex-start;font-size:.8rem;}
+.route-num{width:22px;height:22px;background:var(--sky);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:700;flex-shrink:0;}
+
+/* ═══ PREPAREDNESS ═══ */
+.prep-section{background:var(--dark);}
+.tabs{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:2rem;}
+.tab-btn{padding:9px 22px;border-radius:4px;border:1.5px solid var(--border);background:transparent;color:var(--muted);font-family:'IBM Plex Sans',sans-serif;font-size:.76rem;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;cursor:pointer;transition:all .2s;}
+.tab-btn.active{background:var(--cyan);border-color:var(--cyan);color:var(--navy);}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;animation:fadeUp .4s forwards;}
+.steps{list-style:none;}
+.steps li{padding:1rem 1.2rem;margin-bottom:.7rem;background:var(--card);border-radius:6px;border-left:3px solid var(--sky);display:flex;gap:1rem;align-items:flex-start;}
+.ico{font-size:1.1rem;flex-shrink:0;margin-top:.1rem;}
+
+/* ═══ KM CYCLE ═══ */
+.km-section{background:var(--navy);}
+.km-flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-top:2rem;align-items:center;}
+.km-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.8rem;text-align:center;transition:transform .2s,border-color .2s;}
+.km-card:hover{transform:translateY(-5px);border-color:var(--cyan);}
+.km-icon{font-size:2.3rem;margin-bottom:.9rem;}
+.km-title{font-family:'Bebas Neue',sans-serif;font-size:1.35rem;letter-spacing:1px;color:var(--cyan);}
+.km-sub{font-size:.78rem;color:var(--sky);font-weight:600;margin:.3rem 0;}
+.km-desc{font-size:.78rem;color:var(--muted);}
+.km-arrow{text-align:center;color:var(--muted);font-size:1.8rem;}
+
+/* ═══ REPORT FORM ═══ */
+.report-section{background:var(--card);border-top:1px solid var(--border);}
+.form-embed-box{
+  margin-top:2rem;background:var(--dark);border:1px solid var(--border);
+  border-radius:10px;overflow:hidden;
+}
+.form-embed-header{
+  padding:.9rem 1.5rem;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:.8rem;background:rgba(0,194,224,.07);
+}
+.form-embed-header span{font-family:'IBM Plex Mono',monospace;font-size:.72rem;color:var(--cyan);letter-spacing:2px;}
+.form-embed-header .dot{width:8px;height:8px;border-radius:50%;background:var(--danger);animation:blink 2s infinite;}
+/* ── GOOGLE FORM IFRAME ── */
+.gform-wrap{padding:0;}
+.gform-wrap iframe{width:100%;min-height:780px;border:none;display:block;background:#fff;}
+.form-note{padding:1rem 1.5rem;font-size:.76rem;color:var(--muted);background:rgba(0,194,224,.05);border-top:1px solid var(--border);}
+.form-note strong{color:var(--cyan);}
+
+/* ═══ TRACKING ═══ */
+.tracking-section{background:var(--dark);}
+.track-table{width:100%;border-collapse:collapse;margin-top:2rem;}
+.track-table th{text-align:left;padding:.85rem 1rem;background:var(--card);border-bottom:2px solid var(--border);font-size:.7rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);}
+.track-table td{padding:.9rem 1rem;border-bottom:1px solid var(--border);font-size:.83rem;}
+.track-table tr:hover td{background:rgba(255,255,255,.018);}
+.status{display:inline-block;padding:3px 11px;border-radius:20px;font-size:.67rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;}
+.status.pending{background:rgba(244,169,0,.14);color:var(--warn);}
+.status.ongoing{background:rgba(45,125,210,.14);color:var(--sky);}
+.status.resolved{background:rgba(29,185,84,.14);color:var(--safe);}
+
+/* ═══ ALERTS ═══ */
+.alerts-section{background:var(--card);border-top:1px solid var(--border);}
+.alert-list{display:grid;gap:1rem;margin-top:2rem;}
+.alert-item{background:var(--dark);border:1px solid var(--border);border-radius:8px;padding:1.2rem 1.5rem;display:flex;gap:1.2rem;align-items:flex-start;transition:border-color .2s;}
+.alert-item:hover{border-color:var(--warn);}
+.a-dot{width:10px;height:10px;border-radius:50%;margin-top:5px;flex-shrink:0;}
+.a-dot.red{background:var(--danger);box-shadow:0 0 8px var(--danger);}
+.a-dot.yellow{background:var(--warn);box-shadow:0 0 8px var(--warn);}
+.a-dot.blue{background:var(--sky);}
+.a-dot.green{background:var(--safe);}
+.a-title{font-weight:600;font-size:.88rem;}
+.a-meta{font-size:.72rem;color:var(--muted);margin-top:.2rem;}
+.a-body{font-size:.82rem;color:#8aaace;margin-top:.5rem;}
+
+/* ═══ KM DOCUMENTS ═══ */
+.docs-section{background:var(--navy);}
+.docs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.1rem;margin-top:2rem;}
+.doc-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1.2rem;display:flex;align-items:center;gap:1rem;transition:border-color .2s,transform .2s;cursor:pointer;}
+.doc-card:hover{border-color:var(--cyan);transform:translateX(4px);}
+.doc-card a{display:flex;align-items:center;gap:1rem;width:100%;color:inherit;}
+.doc-ico{width:44px;height:44px;border-radius:6px;background:rgba(45,125,210,.18);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;}
+.doc-title{font-weight:600;font-size:.88rem;}
+.doc-type{font-size:.7rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:.2rem;}
+.doc-note{font-size:.72rem;color:var(--cyan);margin-top:.3rem;}
+
+/* ═══ ICT IMPACT ═══ */
+.ict-section{background:var(--dark);border-top:1px solid var(--border);}
+.ict-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.2rem;margin-top:2rem;}
+.ict-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.5rem;transition:transform .2s,border-color .2s;}
+.ict-card:hover{transform:translateY(-4px);border-color:var(--cyan);}
+.ict-card .ico2{font-size:1.8rem;margin-bottom:.8rem;}
+.ict-card h4{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:1px;color:var(--cyan);margin-bottom:.5rem;}
+.ict-card p{font-size:.78rem;color:var(--muted);}
+
+/* ═══ FOOTER ═══ */
+footer{background:#030a14;border-top:1px solid var(--border);padding:3rem;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:2.5rem;}
+.f-brand .f-drop{width:34px;height:34px;background:var(--cyan);clip-path:polygon(50% 0%,100% 38%,82% 100%,18% 100%,0% 38%);margin-bottom:.9rem;}
+.f-brand p{font-size:.79rem;color:var(--muted);max-width:260px;line-height:1.7;}
+.f-brand .ra{font-size:.68rem;color:#3d5a78;margin-top:.9rem;}
+footer h5{font-family:'Bebas Neue',sans-serif;font-size:.95rem;letter-spacing:2px;color:var(--cyan);margin-bottom:.9rem;}
+footer ul{list-style:none;}
+footer ul li{margin-bottom:.45rem;}
+footer ul a{color:var(--muted);font-size:.79rem;transition:color .2s;}
+footer ul a:hover{color:var(--white);}
+.f-bottom{background:#020710;padding:.85rem 3rem;text-align:center;font-size:.7rem;color:#3d5a78;border-top:1px solid var(--border);}
+
+/* ═══ RESPONSIVE ═══ */
+@media(max-width:900px){
+  .overview-grid,.evac-grid{grid-template-columns:1fr;}
+  footer{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:600px){
+  nav{padding:0 1rem;}
+  .nav-links{display:none;}
+  section{padding:3rem 1.2rem;}
+  .hero-content{padding:3rem 1.2rem;}
+  .hero-stats{gap:1.5rem;}
+  footer{grid-template-columns:1fr;padding:2rem 1.2rem;}
+  .f-bottom{padding:.85rem 1.2rem;}
+  .map-body{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav>
+  <div class="nav-brand">
+    <div class="nav-drop"></div>
+    <span class="nav-name">Panabo DRRM Portal</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#hazard">Hazard Info</a></li>
+    <li><a href="#evacuation">Evacuation</a></li>
+    <li><a href="#preparedness">Preparedness</a></li>
+    <li><a href="#report">Report</a></li>
+    <li><a href="#tracking">Tracking</a></li>
+    <li><a href="#resources">Resources</a></li>
+    <li><a href="#alerts">Alerts</a></li>
+  </ul>
+  <span class="nav-alert">⚡ TYPHOON SEASON ACTIVE</span>
+</nav>
+
+<!-- ═══ TICKER ═══ -->
+<div class="ticker">
+  <div class="ticker-inner">
+    <span>📢 <strong>ADVISORY:</strong> PAGASA reports above-normal rainfall expected this week — monitor local announcements</span>
+    <span>🚨 <strong>FLOOD WATCH:</strong> Low-lying barangays in Panabo City on alert — prepare emergency kits</span>
+    <span>📋 <strong>CLEANUP DRIVE:</strong> April 30 — All barangay officials invited to join canal clearing activities</span>
+    <span>📞 <strong>EMERGENCY HOTLINE:</strong> Panabo CDRRMO — (084) XXX-XXXX &nbsp;|&nbsp; 911</span>
+    <span>📢 <strong>ADVISORY:</strong> PAGASA reports above-normal rainfall expected this week — monitor local announcements</span>
+    <span>🚨 <strong>FLOOD WATCH:</strong> Low-lying barangays in Panabo City on alert — prepare emergency kits</span>
+    <span>📋 <strong>CLEANUP DRIVE:</strong> April 30 — All barangay officials invited to join canal clearing activities</span>
+    <span>📞 <strong>EMERGENCY HOTLINE:</strong> Panabo CDRRMO — (084) XXX-XXXX &nbsp;|&nbsp; 911</span>
+  </div>
+</div>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero" id="home">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <p class="hero-tag">// PA226 Final Project — ICT in Public Administration</p>
+    <h1>FLOOD<br>READY<br><em>PANABO</em></h1>
+    <p class="hero-sub">A centralized ICT-based information hub designed to provide critical flood risk data to citizens, LGU officers, and the DRRM Council of Panabo City — enabling informed decisions, swift response, and community resilience.</p>
+    <div class="hero-btns">
+      <a href="#report" class="btn btn-cyan">Report an Incident</a>
+      <a href="#hazard" class="btn btn-ghost">View Flood Risk Info</a>
+      <a href="#alerts" class="btn btn-ghost">Latest Advisories</a>
+    </div>
+    <div class="hero-stats">
+      <div><div class="stat-num">38mm</div><div class="stat-label">Annual Ground Subsidence</div></div>
+      <div><div class="stat-num">2–8</div><div class="stat-label">Typhoons Per Year</div></div>
+      <div><div class="stat-num">4%</div><div class="stat-label">Major Flood Risk / Year</div></div>
+      <div><div class="stat-num">4</div><div class="stat-label">High-Risk Barangays</div></div>
+    </div>
+  </div>
+  <div class="hero-wave">
+    <svg viewBox="0 0 1440 200" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,110 C300,190 600,30 900,100 C1100,150 1300,60 1440,110 L1440,200 L0,200Z" fill="rgba(26,74,138,.35)"/>
+      <path d="M0,155 C400,95 800,185 1100,135 C1280,108 1390,160 1440,155 L1440,200 L0,200Z" fill="rgba(8,17,31,.95)"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ═══ OVERVIEW ═══ -->
+<section class="overview" id="overview">
+  <div class="sec-tag">Background & Purpose</div>
+  <div class="sec-title">Flooding in Panabo City</div>
+  <div class="divider"></div>
+  <div class="overview-grid">
+    <div class="overview-text">
+      <p>Flooding is one of the most common and destructive environmental hazards affecting communities worldwide. It occurs when heavy rainfall, poor drainage systems, rising river levels, or coastal conditions cause water to overflow into residential and public areas <strong>(Fowler &amp; Kilsby, 2003)</strong>.</p>
+      <p>In <strong>Panabo City</strong>, flooding is a recurring problem, especially in low-lying barangays. The city's vulnerability has increased due to changing weather patterns, intense rainfall, rapid urbanization, and improper waste disposal practices that clog drainage systems and waterways.</p>
+      <p>This portal serves as a <strong>centralized information hub</strong> delivering reliable data to citizens, LGU officers, and the DRRM Council — facilitating knowledge capture, sharing, storage, and application to ensure knowledge is used effectively, especially during disasters.</p>
+      <p style="font-size:.78rem;color:var(--muted);font-style:italic;">Reference: Fowler, H. J., &amp; Kilsby, C. G. (2003). Implications of changes in seasonal and annual extreme rainfall. Geophysical Research Letters, 30(13), 1726. https://doi.org/10.1029/2003GL017327</p>
+    </div>
+    <div class="overview-cards">
+      <div class="ov-card">
+        <h4>🎯 Purpose</h4>
+        <p>Create an accessible information hub for citizens, LGUs, and the DRRM Council with concrete flood preparedness plans and strategies.</p>
+      </div>
+      <div class="ov-card">
+        <h4>🌱 Ground Subsidence</h4>
+        <p>Panabo City has the highest subsidence rate in the Philippines at <strong>38 mm/year</strong> due to groundwater extraction, fishpond operations, and industrial activities.</p>
+      </div>
+      <div class="ov-card">
+        <h4>🌀 Climate Factors</h4>
+        <p>The city is affected by typhoons, low pressure areas (LPAs), and La Niña, which brings above-normal rainfall. 2–8 typhoons are expected annually.</p>
+      </div>
+      <div class="ov-card">
+        <h4>🏚️ Human Factors</h4>
+        <p>Clogged drainage systems, improper waste disposal, and changes in land use contribute to faster water accumulation during rainfall events.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TARGET USERS ═══ -->
+<section class="users-section">
+  <div class="sec-tag">Who This Is For</div>
+  <div class="sec-title">Target Users</div>
+  <div class="divider"></div>
+  <div class="users-grid">
+    <div class="user-card">
+      <div class="user-icon">👨‍👩‍👧‍👦</div>
+      <div class="user-title">Citizens of Panabo</div>
+      <div class="user-desc">Residents needing flood risk information, preparedness guides, evacuation plans, and a channel to report incidents.</div>
+    </div>
+    <div class="user-card">
+      <div class="user-icon">🏛️</div>
+      <div class="user-title">LGU Officers</div>
+      <div class="user-desc">Local Government Unit staff who coordinate disaster response, manage resources, and disseminate public advisories.</div>
+    </div>
+    <div class="user-card">
+      <div class="user-icon">🛡️</div>
+      <div class="user-title">DRRM Council</div>
+      <div class="user-desc">Disaster Risk Reduction and Management Council members overseeing disaster preparedness and response operations.</div>
+    </div>
+    <div class="user-card">
+      <div class="user-icon">🤝</div>
+      <div class="user-title">Concerned Citizens</div>
+      <div class="user-desc">Volunteers, NGOs, and community advocates engaged in disaster risk reduction and environmental protection activities.</div>
+    </div>
+    <div class="user-card">
+      <div class="user-icon">🏢</div>
+      <div class="user-title">Relevant Agencies</div>
+      <div class="user-desc">PAGASA, NDRRMC, DENR, and other government agencies involved in environmental management and disaster response.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ HAZARD LEVELS + MAP ═══ -->
+<section class="hazard-section" id="hazard">
+  <div class="sec-tag">Risk Assessment</div>
+  <div class="sec-title">Flood Risk Information<br>&amp; Awareness</div>
+  <div class="divider"></div>
+  <p class="lead">Panabo City uses a color-coded system to indicate flood hazard levels and guide community response. Know your level — act accordingly.</p>
+  <div class="hazard-grid">
+    <div class="h-card low">
+      <span class="h-badge">🟡 Low Risk</span>
+      <div class="h-height">0.1m – 0.5m</div>
+      <div style="font-size:.78rem;margin-bottom:.6rem;color:var(--muted);">Water Height</div>
+      <div class="h-desc">Minor inconvenience. Stay alert and continue monitoring PAGASA updates and local announcements. Prepare your emergency kit.</div>
+    </div>
+    <div class="h-card med">
+      <span class="h-badge">🟠 Medium Risk</span>
+      <div class="h-height">0.5m – 1.5m</div>
+      <div style="font-size:.78rem;margin-bottom:.6rem;color:var(--muted);">Water Height</div>
+      <div class="h-desc">Possible damage to property. Prepare emergency kits. Consider voluntary pre-emptive evacuation. Avoid flood-prone routes.</div>
+    </div>
+    <div class="h-card high">
+      <span class="h-badge">🔴 High Risk</span>
+      <div class="h-height">Above 1.5m</div>
+      <div style="font-size:.78rem;margin-bottom:.6rem;color:var(--muted);">Water Height</div>
+      <div class="h-desc">Danger to life and property. Mandatory evacuation. Follow all DRRM officer instructions immediately. Do not delay.</div>
+    </div>
+  </div>
+  <p style="margin-top:1.2rem;font-size:.78rem;color:var(--muted);">⚠ There is a <strong style="color:var(--warn)">4%</strong> chance of a major flood occurring in any given year. Floodwaters can reach waist-deep levels in severe cases in high-risk barangays.</p>
+
+  <!-- SIMULATED HAZARD MAP -->
+  <div class="map-visual">
+    <div class="map-header">
+      <span>🗺️ PANABO CITY — SIMULATED FLOOD HAZARD MAP</span>
+      <div style="margin-left:auto;font-size:.68rem;color:var(--muted);">Source: DRRMO / Simulated for illustration</div>
+    </div>
+    <div class="map-body">
+      <div class="map-svg-wrap">
+        <svg viewBox="0 0 520 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:520px;border-radius:6px;background:#0a1f3a;">
+          <!-- Background -->
+          <rect width="520" height="340" fill="#0a1f3a"/>
+          <!-- Water / sea area -->
+          <path d="M0,270 Q100,250 200,265 Q320,280 420,260 L520,270 L520,340 L0,340Z" fill="#1a4a8a" opacity=".6"/>
+          <!-- Main land areas -->
+          <rect x="30" y="50" width="460" height="220" rx="8" fill="#0d2a40" opacity=".8"/>
+          <!-- Roads -->
+          <line x1="260" y1="50" x2="260" y2="270" stroke="#2d4a6a" stroke-width="3"/>
+          <line x1="30" y1="170" x2="490" y2="170" stroke="#2d4a6a" stroke-width="3"/>
+          <line x1="150" y1="50" x2="150" y2="270" stroke="#1e3a55" stroke-width="1.5"/>
+          <line x1="370" y1="50" x2="370" y2="270" stroke="#1e3a55" stroke-width="1.5"/>
+          <!-- HIGH RISK zones -->
+          <ellipse cx="130" cy="195" rx="75" ry="55" fill="#e03333" opacity=".35"/>
+          <ellipse cx="130" cy="195" rx="55" ry="38" fill="#e03333" opacity=".25"/>
+          <text x="130" y="193" text-anchor="middle" fill="#ffd" font-size="9" font-family="IBM Plex Sans, sans-serif" font-weight="600">New Pandan</text>
+          <text x="130" y="205" text-anchor="middle" fill="#fcc" font-size="8" font-family="IBM Plex Sans, sans-serif">HIGH RISK</text>
+          <!-- HIGH RISK 2 -->
+          <ellipse cx="305" cy="210" rx="65" ry="48" fill="#e03333" opacity=".3"/>
+          <text x="305" y="208" text-anchor="middle" fill="#ffd" font-size="9" font-family="IBM Plex Sans, sans-serif" font-weight="600">Gredu</text>
+          <text x="305" y="220" text-anchor="middle" fill="#fcc" font-size="8" font-family="IBM Plex Sans, sans-serif">HIGH RISK</text>
+          <!-- MEDIUM RISK zones -->
+          <ellipse cx="200" cy="105" rx="60" ry="42" fill="#f48900" opacity=".3"/>
+          <text x="200" y="103" text-anchor="middle" fill="#ffe5b4" font-size="9" font-family="IBM Plex Sans, sans-serif" font-weight="600">Santo Niño</text>
+          <text x="200" y="115" text-anchor="middle" fill="#f4c900" font-size="8" font-family="IBM Plex Sans, sans-serif">MED RISK</text>
+          <!-- MEDIUM RISK 2 -->
+          <ellipse cx="405" cy="115" rx="65" ry="42" fill="#f48900" opacity=".28"/>
+          <text x="405" y="113" text-anchor="middle" fill="#ffe5b4" font-size="9" font-family="IBM Plex Sans, sans-serif" font-weight="600">San Vicente</text>
+          <text x="405" y="125" text-anchor="middle" fill="#f4c900" font-size="8" font-family="IBM Plex Sans, sans-serif">MED RISK</text>
+          <!-- City Center -->
+          <ellipse cx="260" cy="170" rx="35" ry="25" fill="#1db954" opacity=".2"/>
+          <text x="260" y="168" text-anchor="middle" fill="#a0ffba" font-size="8.5" font-family="IBM Plex Sans, sans-serif" font-weight="600">Poblacion</text>
+          <text x="260" y="180" text-anchor="middle" fill="#6fd88a" font-size="7.5" font-family="IBM Plex Sans, sans-serif">LOW RISK</text>
+          <!-- Evacuation Centers markers -->
+          <polygon points="80,68 86,80 74,80" fill="#00c2e0" opacity=".9"/>
+          <text x="88" y="78" fill="#00c2e0" font-size="7.5" font-family="IBM Plex Sans, sans-serif">EC1</text>
+          <polygon points="440,68 446,80 434,80" fill="#00c2e0" opacity=".9"/>
+          <text x="448" y="78" fill="#00c2e0" font-size="7.5" font-family="IBM Plex Sans, sans-serif">EC2</text>
+          <polygon points="260,55 266,67 254,67" fill="#00c2e0" opacity=".9"/>
+          <text x="268" y="66" fill="#00c2e0" font-size="7.5" font-family="IBM Plex Sans, sans-serif">EC3</text>
+          <!-- River -->
+          <path d="M0,155 Q80,145 160,158 Q240,170 350,162 Q420,156 520,165" stroke="#2d7dd2" stroke-width="4" fill="none" opacity=".5"/>
+          <text x="200" y="150" fill="#5a9fd4" font-size="7.5" font-family="IBM Plex Sans, sans-serif" font-style="italic">Tagum River System</text>
+          <!-- Labels -->
+          <text x="260" y="300" text-anchor="middle" fill="#2d7dd2" font-size="8" font-family="IBM Plex Sans, sans-serif" font-style="italic">Davao Gulf / Coastal Area</text>
+          <!-- Compass -->
+          <text x="475" y="65" fill="#6a8aaf" font-size="11" font-family="IBM Plex Sans, sans-serif" font-weight="700">N</text>
+          <line x1="480" y1="68" x2="480" y2="82" stroke="#6a8aaf" stroke-width="1.5"/>
+          <polygon points="480,60 476,70 480,67 484,70" fill="#6a8aaf"/>
+        </svg>
+      </div>
+      <div class="map-legend">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:.68rem;color:var(--cyan);letter-spacing:2px;margin-bottom:.5rem;">LEGEND</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#e03333;opacity:.8;"></div> High Risk Zone</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#f48900;opacity:.8;"></div> Medium Risk Zone</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#1db954;opacity:.7;"></div> Low Risk Zone</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#1a4a8a;opacity:.9;"></div> Coastal / Water</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#2d7dd2;opacity:.8;"></div> River System</div>
+        <div class="legend-item"><span style="color:var(--cyan);font-size:.9rem;">▲</span> Evacuation Center</div>
+        <div style="margin-top:.8rem;font-size:.68rem;color:var(--muted);line-height:1.6;padding-top:.6rem;border-top:1px solid var(--border);">⚠ This is a simulated hazard map for educational and planning purposes. For official hazard maps, contact DRRMO Panabo City.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FLOOD-PRONE AREAS ═══ -->
+<section class="areas-section">
+  <div class="sec-tag">High-Risk Zones</div>
+  <div class="sec-title">Flood-Prone Barangays</div>
+  <div class="divider"></div>
+  <p class="lead">Based on recent incidents and hazard maps, the following barangays in Panabo City are most commonly affected by flooding.</p>
+  <div class="areas-grid">
+    <div class="area-card">
+      <div class="area-name">New Pandan</div>
+      <div class="area-risk">🔴 HIGH RISK</div>
+      <div class="area-note">Low-lying area near coastal zone. Prone to severe inundation during heavy rainfall and storm surges.</div>
+    </div>
+    <div class="area-card">
+      <div class="area-name">Gredu</div>
+      <div class="area-risk">🔴 HIGH RISK</div>
+      <div class="area-note">Near river system with poor drainage. Frequently experiences rapid water level rise during typhoons.</div>
+    </div>
+    <div class="area-card">
+      <div class="area-name">Santo Niño</div>
+      <div class="area-risk">🟠 MODERATE RISK</div>
+      <div class="area-note">Affected by drainage overflow and runoff from adjacent elevated areas during intense rainfall.</div>
+    </div>
+    <div class="area-card">
+      <div class="area-name">San Vicente</div>
+      <div class="area-risk">🟠 MODERATE RISK</div>
+      <div class="area-note">Experiences flooding from clogged canals and waterways, worsened by improper waste disposal.</div>
+    </div>
+  </div>
+  <div style="margin-top:1.2rem;padding:1rem 1.4rem;background:rgba(224,51,51,.08);border:1px solid rgba(224,51,51,.25);border-radius:6px;font-size:.8rem;color:#d0a0a0;">
+    ⚠ <strong style="color:var(--danger)">Warning:</strong> Floodwaters can reach <strong>waist-deep levels</strong> in severe cases. Always heed evacuation orders from DRRMO officers immediately.
+  </div>
+</section>
+
+<!-- ═══ EVACUATION CENTERS ═══ -->
+<section class="evac-section" id="evacuation">
+  <div class="sec-tag">Safety Planning</div>
+  <div class="sec-title">Evacuation Centers<br>&amp; Procedures</div>
+  <div class="divider"></div>
+  <p class="lead">Know where to go before disaster strikes. Familiarize yourself with the nearest designated evacuation center in your area.</p>
+  <div class="evac-grid">
+    <div>
+      <div class="evac-center">
+        <div class="evac-num">EC1</div>
+        <div>
+          <div class="evac-name">Panabo City Sports Complex</div>
+          <div class="evac-addr">📍 Poblacion, Panabo City</div>
+          <div class="evac-cap">✅ Capacity: ~500 families | Primary center</div>
+        </div>
+      </div>
+      <div class="evac-center">
+        <div class="evac-num">EC2</div>
+        <div>
+          <div class="evac-name">Panabo National High School</div>
+          <div class="evac-addr">📍 Brgy. San Francisco, Panabo City</div>
+          <div class="evac-cap">✅ Capacity: ~300 families | Secondary center</div>
+        </div>
+      </div>
+      <div class="evac-center">
+        <div class="evac-num">EC3</div>
+        <div>
+          <div class="evac-name">Panabo City Hall Gymnasium</div>
+          <div class="evac-addr">📍 Panabo City Hall Complex</div>
+          <div class="evac-cap">✅ Capacity: ~200 families | Coordination hub</div>
+        </div>
+      </div>
+      <div style="padding:1rem 1.2rem;background:rgba(0,194,224,.07);border:1px solid var(--border);border-radius:8px;font-size:.78rem;color:var(--muted);">
+        🏥 <strong style="color:var(--white)">Medical:</strong> First aid teams deployed at all evacuation centers during emergencies.<br>
+        🍱 <strong style="color:var(--white)">Food:</strong> Emergency food packs distributed in coordination with DSWD.<br>
+        🚒 <strong style="color:var(--white)">Rescue:</strong> Rubber boats and rescue teams on standby at CDRRMO.
+      </div>
+    </div>
+    <div class="evac-map-box">
+      <h4>🚶 Evacuation Procedures</h4>
+      <div class="route-step"><div class="route-num">1</div><div>Receive official evacuation order from barangay captain or DRRMO officer via text, announcements, or sirens.</div></div>
+      <div class="route-step"><div class="route-num">2</div><div>Grab your <strong>emergency kit</strong>: water, food, medicine, documents, flashlight, and extra clothing.</div></div>
+      <div class="route-step"><div class="route-num">3</div><div>Turn off electricity, gas, and water at the main switches before leaving your home.</div></div>
+      <div class="route-step"><div class="route-num">4</div><div>Proceed to your <strong>nearest designated evacuation center</strong> using elevated routes. Avoid flooded roads.</div></div>
+      <div class="route-step"><div class="route-num">5</div><div>Register at the evacuation center and receive your family ID from the barangay health worker.</div></div>
+      <div class="route-step"><div class="route-num">6</div><div>Wait for the official <strong>"All Clear"</strong> signal from DRRMO before returning home.</div></div>
+      <div style="margin-top:1.2rem;padding:.8rem 1rem;background:rgba(224,51,51,.08);border-radius:6px;font-size:.76rem;color:#c08080;">
+        🚫 <strong>DO NOT</strong> return home until officially cleared. Do not walk through flooded roads. Do not use electrical equipment near water.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PREPAREDNESS ═══ -->
+<section class="prep-section" id="preparedness">
+  <div class="sec-tag">Disaster Preparedness</div>
+  <div class="sec-title">Preparedness Guide</div>
+  <div class="divider"></div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab(event,'before')">Before a Flood</button>
+    <button class="tab-btn" onclick="switchTab(event,'during')">During a Flood</button>
+    <button class="tab-btn" onclick="switchTab(event,'after')">After a Flood</button>
+    <button class="tab-btn" onclick="switchTab(event,'community')">Community Action</button>
+  </div>
+  <div id="before" class="tab-panel active">
+    <ul class="steps">
+      <li><span class="ico">🗺️</span><div><strong>Know your risk:</strong> Check the flood hazard map above and identify if your area is prone to flooding. Know your barangay's risk level.</div></li>
+      <li><span class="ico">🎒</span><div><strong>Prepare an emergency kit:</strong> Include food, water (at least 3 days supply), medicine, flashlight, batteries, important documents, and first aid supplies.</div></li>
+      <li><span class="ico">🏠</span><div><strong>Secure your home:</strong> Elevate electrical appliances and important furniture, repair roof leaks, and clear your drainage channels and canals.</div></li>
+      <li><span class="ico">📡</span><div><strong>Stay informed:</strong> Monitor weather updates from PAGASA, follow your barangay's official social media pages, and sign up for SMS alerts.</div></li>
+      <li><span class="ico">📞</span><div><strong>Know your evacuation center:</strong> Identify the nearest center (see above) and plan your route using elevated roads away from flood-prone areas.</div></li>
+    </ul>
+  </div>
+  <div id="during" class="tab-panel">
+    <ul class="steps">
+      <li><span class="ico">🚨</span><div><strong>Evacuate immediately</strong> when advised by authorities or when water levels rise rapidly. Do not wait for the situation to worsen.</div></li>
+      <li><span class="ico">🚫</span><div><strong>Avoid walking or driving through floodwaters:</strong> They may be deeper than they look and can carry debris, waste, and dangerous contaminants.</div></li>
+      <li><span class="ico">⚡</span><div><strong>Stay away from power lines and electrical equipment:</strong> Do not touch wet switches, outlets, or appliances during flooding.</div></li>
+      <li><span class="ico">⛰️</span><div><strong>Move to higher ground</strong> and follow all instructions from rescue teams and DRRM officers without delay.</div></li>
+      <li><span class="ico">📱</span><div><strong>Communicate your location</strong> to relatives and barangay officials. Use SMS or social media to update your status and request help if needed.</div></li>
+    </ul>
+  </div>
+  <div id="after" class="tab-panel">
+    <ul class="steps">
+      <li><span class="ico">✅</span><div><strong>Wait for the official "all clear" signal</strong> from DRRMO or barangay officials before returning home.</div></li>
+      <li><span class="ico">🔍</span><div><strong>Check for damage:</strong> Carefully inspect your house for structural issues, gas leaks, or electrical problems before entering.</div></li>
+      <li><span class="ico">🧹</span><div><strong>Clean and disinfect:</strong> Remove mud and debris, and thoroughly sanitize surfaces, water containers, and food areas to prevent the spread of disease.</div></li>
+      <li><span class="ico">📋</span><div><strong>Report damage and incidents:</strong> Inform the local DRRMO or barangay office about damage, injuries, and community needs using the form below.</div></li>
+      <li><span class="ico">💊</span><div><strong>Monitor your health:</strong> Watch for symptoms of waterborne diseases (diarrhea, skin infections, leptospirosis). Seek medical help immediately if needed.</div></li>
+    </ul>
+  </div>
+  <div id="community" class="tab-panel">
+    <ul class="steps">
+      <li><span class="ico">♻️</span><div><strong>Practice proper waste management:</strong> Do not throw garbage in canals, rivers, or drainage systems — this is a major cause of flooding in Panabo City.</div></li>
+      <li><span class="ico">🤝</span><div><strong>Participate in cleanup drives:</strong> Join your barangay's canal and drainage clearing activities, especially before the rainy season.</div></li>
+      <li><span class="ico">📚</span><div><strong>Attend disaster preparedness seminars:</strong> Learn life-saving skills at CDRRMO-organized events and share that knowledge with neighbors and family.</div></li>
+      <li><span class="ico">🌱</span><div><strong>Support sustainable practices:</strong> Reduce water usage and avoid activities that contribute to land subsidence, such as excessive groundwater extraction.</div></li>
+      <li><span class="ico">📣</span><div><strong>Spread awareness:</strong> Share flood safety information with your community, especially with elderly residents and persons with disabilities.</div></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ═══ KM CYCLE ═══ -->
+<section class="km-section">
+  <div class="sec-tag">Knowledge Management</div>
+  <div class="sec-title">The KM Cycle Applied<br>to Flood Management</div>
+  <div class="divider"></div>
+  <p class="lead">This portal applies the full Knowledge Management cycle — ensuring flood-related information is systematically captured, stored, shared, and applied for improved community resilience and faster response.</p>
+  <div class="km-flow">
+    <div class="km-card">
+      <div class="km-icon">📥</div>
+      <div class="km-title">Capture</div>
+      <div class="km-sub">Citizen Reports &amp; Hazard Data</div>
+      <div class="km-desc">Incident reports from citizens, hazard data, and weather observations are collected through online forms, surveys, and agency submissions.</div>
+    </div>
+    <div class="km-arrow">→</div>
+    <div class="km-card">
+      <div class="km-icon">🗄️</div>
+      <div class="km-title">Storage</div>
+      <div class="km-sub">Forms, Databases &amp; Documents</div>
+      <div class="km-desc">Data is organized into structured databases, official documents, DRRM plans, SOPs, and digital archives accessible to authorized personnel.</div>
+    </div>
+    <div class="km-arrow">→</div>
+    <div class="km-card">
+      <div class="km-icon">📢</div>
+      <div class="km-title">Sharing</div>
+      <div class="km-sub">Advisories, Guides &amp; Announcements</div>
+      <div class="km-desc">Flood advisories, preparedness guides, evacuation procedures, and risk maps are disseminated to citizens, LGU staff, and partner agencies.</div>
+    </div>
+    <div class="km-arrow">→</div>
+    <div class="km-card">
+      <div class="km-icon">⚙️</div>
+      <div class="km-title">Application</div>
+      <div class="km-sub">Improved Preparedness &amp; Decisions</div>
+      <div class="km-desc">Knowledge is applied for improved disaster preparedness, informed LGU decision-making, faster response times, and enhanced community resilience.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ DISASTER REPORTING — GOOGLE FORM ═══ -->
+<section class="report-section" id="report">
+  <div class="sec-tag">Disaster Reporting System</div>
+  <div class="sec-title">Report an Incident</div>
+  <div class="divider"></div>
+  <p class="lead">Citizens can report flood incidents, environmental hazards, or emergencies directly to the DRRMO through this form. All submissions are reviewed and acted upon by LGU authorities. This represents <strong style="color:var(--cyan)">knowledge capture</strong> in the KM cycle.</p>
+
+  <div class="form-embed-box">
+    <div class="form-embed-header">
+      <div class="dot"></div>
+      <span>LIVE INCIDENT REPORTING FORM — Panabo City DRRMO</span>
+      <span style="margin-left:auto;color:var(--muted);font-size:.65rem;">Powered by Google Forms</span>
+    </div>
+    <div class="gform-wrap">
+      <!--
+        ════════════════════════════════════════════════════════════════
+        HOW TO EMBED YOUR GOOGLE FORM:
+        1. Go to docs.google.com/forms and create your form with these fields:
+           - Full Name (Short answer)
+           - Contact Number (Short answer)
+           - Barangay / Location (Short answer)
+           - Type of Incident (Multiple choice: Flooding, Road Damage, Landslide, Power Outage, Drainage Blockage, Other)
+           - Description (Paragraph)
+           - Photo Upload (File upload — requires Google account)
+        2. Click "Send" → Link icon → check "Shorten URL" → copy the link
+        3. Click the 3-dot menu → "Embed HTML" → copy the <iframe> src URL
+        4. Replace YOUR_GOOGLE_FORM_ID below with that src URL
+        ════════════════════════════════════════════════════════════════
+      -->
+      <iframe
+        src="https://docs.google.com/forms/d/e/YOUR_GOOGLE_FORM_ID/viewform?embedded=true"
+        width="100%"
+        height="800"
+        frameborder="0"
+        marginheight="0"
+        marginwidth="0"
+        style="background:#fff;"
+        loading="lazy">
+        Loading Google Form...
+      </iframe>
+    </div>
+    <div class="form-note">
+      📌 <strong>Note:</strong> This form represents <strong>Knowledge Capture</strong> in the KM cycle. Reports are logged, reviewed, and used to improve LGU disaster response and resource deployment. Submitting a report reflects <strong>transparency and accountability in governance</strong>. Required fields: Location, Type of Incident, Description, and optional Photo Upload.
+    </div>
+  </div>
+
+  <!-- Fallback direct link -->
+  <div style="margin-top:1.2rem;padding:1rem 1.4rem;background:rgba(0,194,224,.06);border:1px solid var(--border);border-radius:8px;font-size:.8rem;color:var(--muted);">
+    📎 Can't see the form? <a href="https://docs.google.com/forms/d/e/YOUR_GOOGLE_FORM_ID/viewform" target="_blank" style="color:var(--cyan);text-decoration:underline;">Click here to open it directly →</a>
+    &nbsp;|&nbsp; You can also contact us at: <strong style="color:var(--white)">Panabo CDRRMO — (084) XXX-XXXX</strong>
+  </div>
+</section>
+
+<!-- ═══ TRACKING DASHBOARD ═══ -->
+<section class="tracking-section" id="tracking">
+  <div class="sec-tag">Transparency &amp; Accountability</div>
+  <div class="sec-title">"Track Your Report"<br>Public Dashboard</div>
+  <div class="divider"></div>
+  <p class="lead">This public dashboard lets citizens monitor the status of submitted incident reports — demonstrating transparency and accountability in LGU governance. Reports are updated regularly by DRRMO staff.</p>
+  <div style="overflow-x:auto;">
+    <table class="track-table">
+      <thead>
+        <tr>
+          <th>Ref #</th>
+          <th>Barangay / Location</th>
+          <th>Incident Type</th>
+          <th>Date Filed</th>
+          <th>Assigned To</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>#2026-0421</td><td>Brgy. New Pandan</td><td>Flooding</td><td>Apr 21, 2026</td><td>DRRMO Response Team A</td><td><span class="status resolved">✅ Resolved</span></td></tr>
+        <tr><td>#2026-0418</td><td>Brgy. Gredu</td><td>Drainage Blockage</td><td>Apr 18, 2026</td><td>Public Works Dept.</td><td><span class="status ongoing">🔄 Ongoing</span></td></tr>
+        <tr><td>#2026-0415</td><td>Brgy. Santo Niño</td><td>Road Damage</td><td>Apr 15, 2026</td><td>Engineering Office</td><td><span class="status resolved">✅ Resolved</span></td></tr>
+        <tr><td>#2026-0410</td><td>Brgy. San Vicente</td><td>Flooding</td><td>Apr 10, 2026</td><td>DRRMO Response Team B</td><td><span class="status resolved">✅ Resolved</span></td></tr>
+        <tr><td>#2026-0408</td><td>Poblacion</td><td>Power Outage</td><td>Apr 8, 2026</td><td>DAVECO / Barangay Hall</td><td><span class="status pending">⏳ Pending</span></td></tr>
+        <tr><td>#2026-0405</td><td>Brgy. New Pandan</td><td>Landslide Risk</td><td>Apr 5, 2026</td><td>DRRMO Monitoring Team</td><td><span class="status ongoing">🔄 Ongoing</span></td></tr>
+        <tr><td>#2026-0330</td><td>Brgy. Gredu</td><td>Flooding</td><td>Mar 30, 2026</td><td>DRRMO Response Team A</td><td><span class="status resolved">✅ Resolved</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div style="margin-top:1.2rem;font-size:.76rem;color:var(--muted);">📊 Dashboard updated: May 3, 2026 &nbsp;|&nbsp; Total reports this month: <strong style="color:var(--cyan)">7</strong> &nbsp;|&nbsp; Resolved: <strong style="color:var(--safe)">5</strong> &nbsp;|&nbsp; Ongoing: <strong style="color:var(--sky)">2</strong> &nbsp;|&nbsp; Pending: <strong style="color:var(--warn)">1</strong></div>
+</section>
+
+<!-- ═══ ALERTS & ANNOUNCEMENTS ═══ -->
+<section class="alerts-section" id="alerts">
+  <div class="sec-tag">LGU Advisories</div>
+  <div class="sec-title">Alerts &amp; Announcements</div>
+  <div class="divider"></div>
+  <p class="lead">Simulated LGU advisories from PAGASA, Panabo CDRRMO, and relevant agencies. This section demonstrates the <strong>Sharing</strong> stage of the KM cycle.</p>
+  <div class="alert-list">
+    <div class="alert-item">
+      <div class="a-dot red"></div>
+      <div>
+        <div class="a-title">🚨 FLOOD WARNING — Level MEDIUM | Brgy. New Pandan &amp; Gredu</div>
+        <div class="a-meta">PAGASA / Panabo CDRRMO &nbsp;•&nbsp; April 28, 2026 &nbsp;•&nbsp; 10:30 AM</div>
+        <div class="a-body">Continuous rainfall has raised water levels in low-lying barangays. Residents of New Pandan and Gredu are advised to monitor water levels closely and prepare for possible voluntary evacuation. DRRMO teams are on standby.</div>
+      </div>
+    </div>
+    <div class="alert-item">
+      <div class="a-dot yellow"></div>
+      <div>
+        <div class="a-title">⛈️ WEATHER ADVISORY — Above-Normal Rainfall Expected This Week</div>
+        <div class="a-meta">PAGASA &nbsp;•&nbsp; April 27, 2026 &nbsp;•&nbsp; 8:00 AM</div>
+        <div class="a-body">Active weather disturbances in the Pacific are expected to bring above-normal rainfall to Davao del Norte, including Panabo City. Citizens are urged to secure their properties, clear drainage, and avoid flood-prone areas.</div>
+      </div>
+    </div>
+    <div class="alert-item">
+      <div class="a-dot blue"></div>
+      <div>
+        <div class="a-title">🧹 COMMUNITY CLEANUP DRIVE — April 30, 2026 | All Barangays</div>
+        <div class="a-meta">Panabo LGU Environment Office &nbsp;•&nbsp; April 25, 2026</div>
+        <div class="a-body">City-wide cleanup drive targeting drainage canals, waterways, and road gutters. All barangay officials and community volunteers are invited to participate. Assembly at barangay halls at 7:00 AM.</div>
+      </div>
+    </div>
+    <div class="alert-item">
+      <div class="a-dot green"></div>
+      <div>
+        <div class="a-title">✅ PRE-TYPHOON SEASON EVACUATION DRILL — May 5, 2026</div>
+        <div class="a-meta">Panabo CDRRMO &nbsp;•&nbsp; April 24, 2026</div>
+        <div class="a-body">Mandatory evacuation drill for high-risk barangays: New Pandan, Gredu, Santo Niño, and San Vicente. Designated evacuation centers will be activated for simulation. All residents are required to participate.</div>
+      </div>
+    </div>
+    <div class="alert-item">
+      <div class="a-dot yellow"></div>
+      <div>
+        <div class="a-title">📋 ENVIRONMENTAL CAMPAIGN — No Littering in Drainage Systems</div>
+        <div class="a-meta">Panabo City Environment &amp; Natural Resources Office &nbsp;•&nbsp; April 20, 2026</div>
+        <div class="a-body">Reminder: Throwing garbage in canals, rivers, and drainage systems is prohibited under city ordinance. Violations are subject to fines. Help keep our waterways clear to prevent flooding in our community.</div>
+      </div>
+    </div>
+    <div class="alert-item">
+      <div class="a-dot blue"></div>
+      <div>
+        <div class="a-title">📞 UPDATED LGU DIRECTORY — Emergency Hotlines 2026</div>
+        <div class="a-meta">Panabo LGU &nbsp;•&nbsp; Updated April 2026</div>
+        <div class="a-body">
+          🆘 <strong>National Emergency:</strong> 911 &nbsp;|&nbsp;
+          🛡️ <strong>Panabo CDRRMO:</strong> (084) XXX-XXXX &nbsp;|&nbsp;
+          🏛️ <strong>Panabo City Hall:</strong> (084) XXX-XXXX &nbsp;|&nbsp;
+          🏥 <strong>Panabo Community Hospital:</strong> (084) XXX-XXXX &nbsp;|&nbsp;
+          🚒 <strong>BFP Panabo:</strong> (084) XXX-XXXX &nbsp;|&nbsp;
+          🔴 <strong>Philippine Red Cross - Davao del Norte:</strong> (084) XXX-XXXX
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ KM DOCUMENTS / RESOURCES ═══ -->
+<section class="docs-section" id="resources">
+  <div class="sec-tag">Knowledge Management Section</div>
+  <div class="sec-title">Documents, Plans<br>&amp; Resources</div>
+  <div class="divider"></div>
+  <p class="lead">This section demonstrates <strong style="color:var(--cyan)">Knowledge Storage and Sharing</strong> in the KM cycle. All documents are organized and accessible for citizens, LGU staff, and partner agencies. Replace the links below with your actual Google Drive links.</p>
+  <div class="docs-grid">
+    <div class="doc-card">
+      <a href="YOUR_GOOGLE_DRIVE_LINK_1" target="_blank">
+        <div class="doc-ico">📘</div>
+        <div>
+          <div class="doc-title">Panabo City DRRM Plan</div>
+          <div class="doc-type">DRRM Plan • PDF</div>
+          <div class="doc-note">→ View on Google Drive</div>
+        </div>
+      </a>
+    </div>
+    <div class="doc-card">
+      <a href="YOUR_GOOGLE_DRIVE_LINK_2" target="_blank">
+        <div class="doc-ico">🌿</div>
+        <div>
+          <div class="doc-title">Environmental Policies</div>
+          <div class="doc-type">Policy Document • PDF</div>
+          <div class="doc-note">→ View on Google Drive</div>
+        </div>
+      </a>
+    </div>
+    <div class="doc-card">
+      <a href="YOUR_GOOGLE_DRIVE_LINK_3" target="_blank">
+        <div class="doc-ico">📋</div>
+        <div>
+          <div class="doc-title">Standard Operating Procedures (SOPs)</div>
+          <div class="doc-type">SOP Manual • PDF</div>
+          <div class="doc-note">→ View on Google Drive</div>
+        </div>
+      </a>
+    </div>
+    <div class="doc-card">
+      <a href="YOUR_GOOGLE_DRIVE_LINK_4" target="_blank">
+        <div class="doc-ico">👥</div>
+        <div>
+          <div class="doc-title">Citizen's Preparedness Guide</div>
+          <div class="doc-type">IEC Material • PDF</div>
+          <div class="doc-note">→ View on Google Drive</div>
+        </div>
+      </a>
+    </div>
+    <div class="doc-card">
+      <a href="YOUR_GOOGLE_DRIVE_LINK_5" target="_blank">
+        <div class="doc-ico">🗺️</div>
+        <div>
+          <div class="doc-title">Official Flood Hazard Map — Panabo</div>
+          <div class="doc-type">Hazard Map • PDF</div>
+          <div class="doc-note">→ View on Google Drive</div>
+        </div>
+      </a>
+    </div>
+    <div class="doc-card">
+      <a href="YOUR_GOOGLE_DRIVE_LINK_6" target="_blank">
+        <div class="doc-ico">🚁</div>
+        <div>
+          <div class="doc-title">Evacuation Routes &amp; Procedures</div>
+          <div class="doc-type">Evacuation Plan • PDF</div>
+          <div class="doc-note">→ View on Google Drive</div>
+        </div>
+      </a>
+    </div>
+    <div class="doc-card">
+      <a href="YOUR_GOOGLE_DRIVE_LINK_7" target="_blank">
+        <div class="doc-ico">📰</div>
+        <div>
+          <div class="doc-title">Republic Act No. 10121</div>
+          <div class="doc-type">DRRM Law • PDF</div>
+          <div class="doc-note">→ DRRM Governance Reference</div>
+        </div>
+      </a>
+    </div>
+    <div class="doc-card">
+      <a href="YOUR_GOOGLE_DRIVE_LINK_8" target="_blank">
+        <div class="doc-ico">📊</div>
+        <div>
+          <div class="doc-title">Flood Incident Reports Archive</div>
+          <div class="doc-type">Reports Database • Google Sheet</div>
+          <div class="doc-note">→ View on Google Sheets</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ICT IMPACT ═══ -->
+<section class="ict-section">
+  <div class="sec-tag">ICT in Public Administration</div>
+  <div class="sec-title">How This System<br>Improves Governance</div>
+  <div class="divider"></div>
+  <p class="lead">This ICT-based portal directly supports Panabo City's LGU by improving the four key areas of public administration and disaster management.</p>
+  <div class="ict-grid">
+    <div class="ict-card">
+      <div class="ico2">⚡</div>
+      <h4>Disaster Response Time</h4>
+      <p>Real-time incident reporting via the online form allows DRRMO to receive and act on reports faster, reducing the time between incident occurrence and official response.</p>
+    </div>
+    <div class="ict-card">
+      <div class="ico2">🤝</div>
+      <h4>LGU–Citizen Coordination</h4>
+      <p>The portal bridges the gap between government agencies and citizens — enabling two-way communication through incident reporting, advisories, and public dashboards.</p>
+    </div>
+    <div class="ict-card">
+      <div class="ico2">🔍</div>
+      <h4>Transparency &amp; Accountability</h4>
+      <p>The public "Track Your Report" dashboard shows citizens the real-time status of their reports, holding LGU officers accountable and building public trust in governance.</p>
+    </div>
+    <div class="ict-card">
+      <div class="ico2">🚀</div>
+      <h4>Efficiency of Public Service</h4>
+      <p>Centralized digital storage of DRRM plans, SOPs, and resources eliminates paperwork bottlenecks and ensures the right information reaches the right people instantly.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="f-brand">
+    <div class="f-drop"></div>
+    <p>Panabo City Flood Management &amp; DRRM Portal — An ICT-based information hub for disaster preparedness, citizen engagement, and LGU–community coordination.</p>
+    <p class="ra">Republic Act No. 10121 — Philippine Disaster Risk Reduction and Management Act of 2010</p>
+  </div>
+  <div>
+    <h5>Navigation</h5>
+    <ul>
+      <li><a href="#home">Home</a></li>
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#hazard">Flood Risk Info</a></li>
+      <li><a href="#evacuation">Evacuation Centers</a></li>
+      <li><a href="#preparedness">Preparedness Guide</a></li>
+    </ul>
+  </div>
+  <div>
+    <h5>Tools</h5>
+    <ul>
+      <li><a href="#report">Report an Incident</a></li>
+      <li><a href="#tracking">Track Your Report</a></li>
+      <li><a href="#resources">Documents &amp; Plans</a></li>
+      <li><a href="#alerts">Alerts &amp; Advisories</a></li>
+    </ul>
+  </div>
+  <div>
+    <h5>Agencies</h5>
+    <ul>
+      <li><a href="#">Panabo CDRRMO</a></li>
+      <li><a href="#">Panabo City LGU</a></li>
+      <li><a href="#">PAGASA</a></li>
+      <li><a href="#">NDRRMC</a></li>
+      <li><a href="#">DENR</a></li>
+      <li><a href="#">Philippine Red Cross</a></li>
+    </ul>
+  </div>
+</footer>
+<div class="f-bottom">
+  © 2026 Panabo City DRRM Flood Management Portal &nbsp;|&nbsp; PA226 Final Project — ICT in Public Administration &nbsp;|&nbsp; Knowledge Management &amp; ICT &nbsp;|&nbsp; Built for Flood-Ready Communities
+</div>
+
+<script>
+function switchTab(e, id) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  e.target.classList.add('active');
+  document.getElementById(id).classList.add('active');
+}
+</script>
+</body>
+</html>
